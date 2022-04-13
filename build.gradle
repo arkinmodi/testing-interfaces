@@ -1,6 +1,5 @@
-plugins {
-  id 'java'
-}
+apply plugin: 'java'
+apply plugin: 'com.diffplug.spotless'
 
 group = 'com.arkinmodi'
 version = '0.0.1-SNAPSHOT'
@@ -9,17 +8,58 @@ sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
 repositories {
-  mavenCentral()
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.diffplug.spotless:spotless-plugin-gradle:+'
+    }
+
+    // Enable dependency dynamic version lock (buildscript-gradle.lockfile)
+    configurations.classpath {
+        resolutionStrategy.activateDependencyLocking()
+    }
+}
+
+// Enable dependency dynamic version lock (gradle.lockfile)
+dependencyLocking {
+    lockAllConfigurations()
+}
+
+// Disable dependency dynamic versioning caching
+configurations.all {
+    resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
 }
 
 dependencies {
-  testImplementation(platform('org.junit:junit-bom:5.8.2'))
+    testImplementation(platform('org.junit:junit-bom:+'))
 
-  testImplementation('org.junit.jupiter:junit-jupiter-api:5.8.2')
+    testImplementation('org.junit.jupiter:junit-jupiter-api')
 
-  testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine')
+    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine')
 }
 
-tasks.named('test') {
-  useJUnitPlatform()
+test {
+    useJUnitPlatform()
+}
+
+spotless {
+    enforceCheck = true
+
+    format '.gradle', {
+        target '*.gradle'
+        endWithNewline()
+        trimTrailingWhitespace()
+    }
+
+    java {
+        importOrder('java', 'javax', 'org', 'com', 'com.arkinmodi', '')
+        endWithNewline()
+        trimTrailingWhitespace()
+    }
 }
