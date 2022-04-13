@@ -1,7 +1,7 @@
 package com.arkinmodi.testinginterfaces.contract;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 
@@ -22,14 +22,14 @@ public interface ListTestContract {
         var actual = underTest.size();
 
         // Then
-        assertEquals(2, actual);
+        assertThat(actual).isEqualTo(2);
     }
 
     @Test
     default void testListSize_EmptyList() {
         var actual = underTest().size();
 
-        assertEquals(0, actual);
+        assertThat(actual).isEqualTo(0);
     }
 
     @Test
@@ -40,12 +40,12 @@ public interface ListTestContract {
 
         var actual = underTest.get(0);
 
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     default void testListGet_EmptyList() {
-        assertThrows(IndexOutOfBoundsException.class, () -> underTest().get(0));
+        assertThatThrownBy(() -> underTest().get(0)).isInstanceOf(IndexOutOfBoundsException.class);
     }
 
 }
