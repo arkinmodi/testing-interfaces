@@ -28,5 +28,8 @@ hs_err_pid*
 # Ignore Gradle build output directory
 build
 
+# Check In Gradle Wrapper
+!gradle/wrapper/gradle-wrapper.jar
+
 # Visual Studio Code
 .vscode/
